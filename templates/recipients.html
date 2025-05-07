@@ -1,0 +1,37 @@
+<h2>Recipients</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th><th>Name</th><th>Address</th><th>Contact</th><th>Email</th><th>Phone</th><th>Description</th><th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in recipients %}
+        <tr>
+            <td>{{ r.recipientID }}</td>
+            <td>{{ r.organizationName }}</td>
+            <td>{{ r.streetAddress }}, {{ r.city }}, {{ r.state }} {{ r.zip }}</td>
+            <td>{{ r.contactName }}</td>
+            <td>{{ r.email }}</td>
+            <td>{{ r.phone }}</td>
+            <td>{{ r.description }}</td>
+            <td><form action="/delete-recipient/{{ r.recipientID }}" method="POST"><button>Delete</button></form></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Add Recipient</h3>
+<form action="/add-recipient" method="POST">
+    <input name="organizationName" placeholder="Organization Name" required>
+    <input name="streetAddress" placeholder="Street Address" required>
+    <input name="city" placeholder="City" required>
+    <input name="state" placeholder="State" required>
+    <input name="zip" placeholder="ZIP" required>
+    <input name="contactName" placeholder="Contact" required>
+    <input name="email" placeholder="Email">
+    <input name="phone" placeholder="Phone">
+    <input name="description" placeholder="Notes">
+    <button type="submit">Add</button>
+</form>

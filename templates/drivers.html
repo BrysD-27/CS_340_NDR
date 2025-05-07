@@ -1,0 +1,40 @@
+<h2>Drivers</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th><th>First</th><th>Last</th><th>Phone</th><th>Email</th><th>Emergency Contact</th><th>Status</th><th>Notes</th><th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in drivers %}
+        <tr>
+            <td>{{ d.driverID }}</td>
+            <td>{{ d.firstName }}</td>
+            <td>{{ d.lastName }}</td>
+            <td>{{ d.phone }}</td>
+            <td>{{ d.email }}</td>
+            <td>{{ d.emergencyContactName }} / {{ d.emergencyContactPhone }}</td>
+            <td>{{ 'Active' if d.activeStatus else 'Inactive' }}</td>
+            <td>{{ d.driverDetails }}</td>
+            <td><form action="/delete-driver/{{ d.driverID }}" method="POST"><button>Delete</button></form></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Add Driver</h3>
+<form action="/add-driver" method="POST">
+    <input name="firstName" placeholder="First" required>
+    <input name="lastName" placeholder="Last" required>
+    <input name="phone" placeholder="Phone">
+    <input name="email" placeholder="Email">
+    <input name="emergencyContactName" placeholder="Emergency Contact">
+    <input name="emergencyContactPhone" placeholder="Emergency Phone">
+    <select name="activeStatus" required>
+        <option value="1">Active</option>
+        <option value="0">Inactive</option>
+    </select>
+    <input name="driverDetails" placeholder="Notes">
+    <button type="submit">Add</button>
+</form>

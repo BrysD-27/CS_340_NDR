@@ -1,0 +1,32 @@
+<h2>Delivery Supplies</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th><th>Delivery</th><th>Supply</th><th>Quantity</th><th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ds in deliveries_supplies %}
+        <tr>
+            <td>{{ ds.deliverySupplyID }}</td>
+            <td>{{ ds.deliveryID }}</td>
+            <td>{{ ds.supplyID }}</td>
+            <td>{{ ds.supplyQuantity }}</td>
+            <td><form action="/delete-delivery-supply/{{ ds.deliverySupplyID }}" method="POST"><button>Delete</button></form></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Assign a Supply to a Delivery</h3>
+<form action="/add-delivery-supply" method="POST">
+    <select name="delivery" placeholder="Delivery" required>
+        <option selected>Select Delivery</option>
+    </select>
+    <select name="supply" placeholder="Supply" required>
+        <option selected>Select Supply</option>
+    </select>    
+    <input name="supplyQuantity" type="number" placeholder="Quantity" required>
+    <button type="submit">Assign</button>
+</form>
