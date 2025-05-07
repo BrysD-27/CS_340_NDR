@@ -13,7 +13,8 @@
             <td>{{ ds.deliveryID }}</td>
             <td>{{ ds.supplyID }}</td>
             <td>{{ ds.supplyQuantity }}</td>
-            <td><form action="/delete-delivery-supply/{{ ds.deliverySupplyID }}" method="POST"><button>Delete</button></form></td>
+            <td><button>Edit</button></td>
+            <td><form action="/delete-delivery-supply/{{ ds.deliverySupplyID }}" method="POST" style="margin: 0;"><button>Delete</button></form></td>
         </tr>
         {% endfor %}
     </tbody>

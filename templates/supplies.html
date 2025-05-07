@@ -15,8 +15,9 @@
             <td>{{ s.supplyCategory }}</td>
             <td>{{ s.currentInventory }}</td>
             <td>{{ s.unitDescription }}</td>
+            <td><button>Edit</button></td>
             <td>
-                <form action="/delete-supply/{{ s.supplyID }}" method="POST"><button>Delete</button></form>
+                <form action="/delete-supply/{{ s.supplyID }}" method="POST" style="margin: 0;"><button>Delete</button></form>
             </td>
         </tr>
         {% endfor %}

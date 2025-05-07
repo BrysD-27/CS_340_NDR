@@ -16,7 +16,8 @@
             <td>{{ r.email }}</td>
             <td>{{ r.phone }}</td>
             <td>{{ r.description }}</td>
-            <td><form action="/delete-recipient/{{ r.recipientID }}" method="POST"><button>Delete</button></form></td>
+            <td><button>Edit</button></td>
+            <td><form action="/delete-recipient/{{ r.recipientID }}" method="POST" style="margin: 0;"><button>Delete</button></form></td>
         </tr>
         {% endfor %}
     </tbody>

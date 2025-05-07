@@ -15,7 +15,8 @@
             <td>{{ d.campaignName }}</td>
             <td>{{ d.deliveredDateTime }}</td>
             <td>{{ d.notes }}</td>
-            <td><form action="/delete-delivery/{{ d.deliveryID }}" method="POST"><button>Delete</button></form></td>
+            <td><button>Edit</button></td>
+            <td><form action="/delete-delivery/{{ d.deliveryID }}" method="POST" style="margin: 0;"><button>Delete</button></form></td>
         </tr>
         {% endfor %}
     </tbody>

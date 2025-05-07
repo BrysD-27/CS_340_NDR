@@ -17,7 +17,8 @@
             <td>{{ d.emergencyContactName }} / {{ d.emergencyContactPhone }}</td>
             <td>{{ 'Active' if d.activeStatus else 'Inactive' }}</td>
             <td>{{ d.driverDetails }}</td>
-            <td><form action="/delete-driver/{{ d.driverID }}" method="POST"><button>Delete</button></form></td>
+            <td><button>Edit</button></td>
+            <td><form action="/delete-driver/{{ d.driverID }}" method="POST" style="margin: 0;"><button>Delete</button></form></td>
         </tr>
         {% endfor %}
     </tbody>
