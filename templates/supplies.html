@@ -1,9 +1,19 @@
+{% extends "index.html" %}
+
+{% block content %}
+
 <h2>Supplies</h2>
 
 <table>
     <thead>
         <tr>
-            <th>ID</th><th>Brand</th><th>Model</th><th>Category</th><th>Inventory</th><th>Description</th><th>Actions</th>
+            <th>ID</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Category</th>
+            <th>Inventory</th>
+            <th>Description</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -15,9 +25,10 @@
             <td>{{ s.supplyCategory }}</td>
             <td>{{ s.currentInventory }}</td>
             <td>{{ s.unitDescription }}</td>
-            <td><button>Edit</button></td>
+            <td><button disabled>Edit</button></td>
             <td>
-                <form action="/delete-supply/{{ s.supplyID }}" method="POST" style="margin: 0;"><button>Delete</button></form>
+                <form action="/delete-supply/{{ s.supplyID }}" method="POST" style="margin: 0;"><button
+                        disabled>Delete</button></form>
             </td>
         </tr>
         {% endfor %}
@@ -31,5 +42,6 @@
     <input name="supplyCategory" placeholder="Category" required>
     <input name="currentInventory" type="number" placeholder="Inventory" required>
     <input name="unitDescription" placeholder="Description">
-    <button type="submit">Add</button>
+    <button type="submit" disabled>Add</button>
 </form>
+{% endblock %}

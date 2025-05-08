@@ -1,9 +1,18 @@
+{% extends "index.html" %}
+
+{% block content %}
 <h2>Deliveries</h2>
 
 <table>
     <thead>
         <tr>
-            <th>ID</th><th>Recipient</th><th>Driver</th><th>Campaign</th><th>Date</th><th>Notes</th><th>Actions</th>
+            <th>ID</th>
+            <th>Recipient</th>
+            <th>Driver</th>
+            <th>Campaign</th>
+            <th>Date</th>
+            <th>Notes</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -15,8 +24,11 @@
             <td>{{ d.campaignName }}</td>
             <td>{{ d.deliveredDateTime }}</td>
             <td>{{ d.notes }}</td>
-            <td><button>Edit</button></td>
-            <td><form action="/delete-delivery/{{ d.deliveryID }}" method="POST" style="margin: 0;"><button>Delete</button></form></td>
+            <td><button disabled>Edit</button></td>
+            <td>
+                <form action="/delete-delivery/{{ d.deliveryID }}" method="POST" style="margin: 0;"><button
+                        disabled>Delete</button></form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
@@ -26,12 +38,13 @@
 <form action="/add-delivery" method="POST">
     <select name="recipient" placeholder="Recipient" required>
         <option selected>Select Recipient</option>
-    </select>    
+    </select>
     <select name="driver" placeholder="Driver" required>
         <option selected>Select Driver</option>
     </select>
     <input name="campaignName" placeholder="Campaign Name">
     <input name="deliveredDateTime" placeholder="Date/Time">
     <input name="notes" placeholder="Notes">
-    <button type="submit">Add</button>
+    <button type="submit" disabled>Add</button>
 </form>
+{% endblock %}

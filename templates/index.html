@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>NDR App - Home</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-    <h1>Northwest Disaster Relief App</h1>
-    <ul>
-        <li><a href="/supplies">Manage Supplies</a></li>
-        <li><a href="/deliveries">Manage Deliveries</a></li>
-        <li><a href="/drivers">Manage Drivers</a></li>
-        <li><a href="/recipients">Manage Recipients</a></li>
-        <li><a href="/deliveries-supplies">Manage Delivery Supplies</a></li>
-    </ul>
+    <nav>
+        <div>
+            <h1>Northwest Disaster Relief Transportation Portal</h1>
+            <a href="{{ url_for('index') }}">Home</a>
+            <a href="{{ url_for('supplies') }}">Supplies</a>
+            <a href="{{ url_for('drivers') }}">Drivers</a>
+            <a href="{{ url_for('recipients') }}">Recipients</a>
+            <a href="{{ url_for('deliveries') }}">Deliveries</a>
+            <a href="{{ url_for('deliveries_supplies') }}">Deliveries Supplies</a>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
 </body>
+
 </html>

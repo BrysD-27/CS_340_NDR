@@ -48,8 +48,8 @@ CREATE TABLE Deliveries (
     campaignName VARCHAR(100),
     deliveredDateTime DATETIME,
     notes TEXT,
-    FOREIGN KEY (recipientID) REFERENCES Recipients(recipientID) ON DELETE CASCADE,
-    FOREIGN KEY (driverID) REFERENCES Drivers(driverID) ON DELETE CASCADE
+    FOREIGN KEY (recipientID) REFERENCES Recipients(recipientID),
+    FOREIGN KEY (driverID) REFERENCES Drivers(driverID)
 );
 
 CREATE TABLE DeliveriesSupplies (
@@ -57,8 +57,8 @@ CREATE TABLE DeliveriesSupplies (
     deliveryID INT NOT NULL,
     supplyID INT NOT NULL,
     supplyQuantity INT NOT NULL,
-    FOREIGN KEY (deliveryID) REFERENCES Deliveries(deliveryID) ON DELETE CASCADE,
-    FOREIGN KEY (supplyID) REFERENCES Supplies(supplyID) ON DELETE CASCADE
+    FOREIGN KEY (deliveryID) REFERENCES Deliveries(deliveryID),
+    FOREIGN KEY (supplyID) REFERENCES Supplies(supplyID)
 );
 
 -- Sample Data: Supplies

@@ -1,9 +1,20 @@
+{% extends "index.html" %}
+
+{% block content %}
 <h2>Drivers</h2>
 
 <table>
     <thead>
         <tr>
-            <th>ID</th><th>First</th><th>Last</th><th>Phone</th><th>Email</th><th>Emergency Contact</th><th>Status</th><th>Notes</th><th>Actions</th>
+            <th>ID</th>
+            <th>First</th>
+            <th>Last</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Emergency Contact</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -17,8 +28,11 @@
             <td>{{ d.emergencyContactName }} / {{ d.emergencyContactPhone }}</td>
             <td>{{ 'Active' if d.activeStatus else 'Inactive' }}</td>
             <td>{{ d.driverDetails }}</td>
-            <td><button>Edit</button></td>
-            <td><form action="/delete-driver/{{ d.driverID }}" method="POST" style="margin: 0;"><button>Delete</button></form></td>
+            <td><button disabled>Edit</button></td>
+            <td>
+                <form action="/delete-driver/{{ d.driverID }}" method="POST" style="margin: 0;"><button
+                        disabled>Delete</button></form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
@@ -37,5 +51,6 @@
         <option value="0">Inactive</option>
     </select>
     <input name="driverDetails" placeholder="Notes">
-    <button type="submit">Add</button>
+    <button type="submit" disabled>Add</button>
 </form>
+{% endblock %}

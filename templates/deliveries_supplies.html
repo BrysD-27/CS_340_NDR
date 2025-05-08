@@ -1,9 +1,16 @@
+{% extends "index.html" %}
+
+{% block content %}
 <h2>Delivery Supplies</h2>
 
 <table>
     <thead>
         <tr>
-            <th>ID</th><th>Delivery</th><th>Supply</th><th>Quantity</th><th>Actions</th>
+            <th>ID</th>
+            <th>Delivery</th>
+            <th>Supply</th>
+            <th>Quantity</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -13,8 +20,11 @@
             <td>{{ ds.deliveryID }}</td>
             <td>{{ ds.supplyID }}</td>
             <td>{{ ds.supplyQuantity }}</td>
-            <td><button>Edit</button></td>
-            <td><form action="/delete-delivery-supply/{{ ds.deliverySupplyID }}" method="POST" style="margin: 0;"><button>Delete</button></form></td>
+            <td><button disabled>Edit</button></td>
+            <td>
+                <form action="/delete-delivery-supply/{{ ds.deliverySupplyID }}" method="POST" style="margin: 0;">
+                    <button disabled>Delete</button></form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
@@ -27,7 +37,8 @@
     </select>
     <select name="supply" placeholder="Supply" required>
         <option selected>Select Supply</option>
-    </select>    
+    </select>
     <input name="supplyQuantity" type="number" placeholder="Quantity" required>
-    <button type="submit">Assign</button>
+    <button type="submit" disabled>Assign</button>
 </form>
+{% endblock %}
