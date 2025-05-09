@@ -1,0 +1,50 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h2>Deliveries</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Recipient</th>
+            <th>Driver</th>
+            <th>Campaign</th>
+            <th>Date</th>
+            <th>Notes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in deliveries %}
+        <tr>
+            <td>{{ d.deliveryID }}</td>
+            <td>{{ d.recipientID }}</td>
+            <td>{{ d.driverID }}</td>
+            <td>{{ d.campaignName }}</td>
+            <td>{{ d.deliveredDateTime }}</td>
+            <td>{{ d.notes }}</td>
+            <td><button disabled>Edit</button></td>
+            <td>
+                <form action="/delete-delivery/{{ d.deliveryID }}" method="POST" style="margin: 0;"><button
+                        disabled>Delete</button></form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Add Delivery</h3>
+<form action="/add-delivery" method="POST">
+    <select name="recipient" placeholder="Recipient" required>
+        <option selected>Select Recipient</option>
+    </select>
+    <select name="driver" placeholder="Driver" required>
+        <option selected>Select Driver</option>
+    </select>
+    <input name="campaignName" placeholder="Campaign Name">
+    <input name="deliveredDateTime" placeholder="Date/Time">
+    <input name="notes" placeholder="Notes">
+    <button type="submit" disabled>Add</button>
+</form>
+{% endblock %}
