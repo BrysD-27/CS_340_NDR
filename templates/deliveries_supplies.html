@@ -18,12 +18,13 @@
         <tr>
             <td>{{ ds.deliverySupplyID }}</td>
             <td>{{ ds.deliveryID }}</td>
-            <td>{{ ds.supplyID }}</td>
+            <td>{{ ds.supplyBrand }} {{ ds.supplyModel }}</td>
             <td>{{ ds.supplyQuantity }}</td>
             <td><button disabled>Edit</button></td>
             <td>
                 <form action="/delete-delivery-supply/{{ ds.deliverySupplyID }}" method="POST" style="margin: 0;">
-                    <button disabled>Delete</button></form>
+                    <button disabled>Delete</button>
+                </form>
             </td>
         </tr>
         {% endfor %}
@@ -34,9 +35,15 @@
 <form action="/add-delivery-supply" method="POST">
     <select name="delivery" placeholder="Delivery" required>
         <option selected>Select Delivery</option>
+        {% for d in deliveries %}
+            <option value="{{ d.deliveryID }}">{{ d.deliveryID }}</option>
+        {% endfor %}
     </select>
     <select name="supply" placeholder="Supply" required>
         <option selected>Select Supply</option>
+        {% for s in supplies %}
+            <option value="{{ s.supplyID }}">{{ s.supplyBrand }} {{ s.supplyModel }}</option>
+        {% endfor %}
     </select>
     <input name="supplyQuantity" type="number" placeholder="Quantity" required>
     <button type="submit" disabled>Assign</button>
