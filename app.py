@@ -11,6 +11,7 @@ app.config['MYSQL_PASSWORD'] = '[your_db_password]'
 app.config['MYSQL_DB'] = 'cs340_[your_onid]'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
 
+
 mysql = MySQL(app)
 
 @app.route('/')
@@ -54,21 +55,60 @@ def recipients():
 def deliveries():
     cur = mysql.connection.cursor()
     cur.execute("""
-        SELECT deliveryID, recipientID, driverID, campaignName, deliveredDateTime, notes
-        FROM Deliveries;
+        SELECT d.deliveryID,
+            r.organizationName AS recipientName,
+            CONCAT(dr.firstName, ' ', dr.lastName) AS driverName,
+            d.campaignName, d.deliveredDateTime, d.notes
+        FROM Deliveries d
+        JOIN Recipients r ON d.recipientID = r.recipientID
+        JOIN Drivers dr ON d.driverID = dr.driverID;
     """)
     deliveries_data = cur.fetchall()
-    return render_template("deliveries.html", deliveries=deliveries_data)
+
+    # Get recipients for dropdown
+    cur.execute("SELECT recipientID, organizationName FROM Recipients;")
+    recipients_list = cur.fetchall()
+
+    # Get drivers for dropdown
+    cur.execute("SELECT driverID, firstName, lastName FROM Drivers WHERE activeStatus = 1;")
+    drivers_list = cur.fetchall()
+
+    return render_template(
+        "deliveries.html",
+        deliveries=deliveries_data,
+        recipients=recipients_list,
+        drivers=drivers_list
+    )
 
 @app.route('/deliveries-supplies')
 def deliveries_supplies():
     cur = mysql.connection.cursor()
     cur.execute("""
-        SELECT deliverySupplyID, deliveryID, supplyID, supplyQuantity
-        FROM DeliveriesSupplies;
+        SELECT ds.deliverySupplyID,
+               ds.deliveryID,
+               s.supplyBrand,
+               s.supplyModel,
+               ds.supplyQuantity
+        FROM DeliveriesSupplies ds
+        JOIN Supplies s ON ds.supplyID = s.supplyID;
     """)
+
     ds_data = cur.fetchall()
-    return render_template("deliveries_supplies.html", deliveries_supplies=ds_data)
+
+    # Get deliveries for dropdown
+    cur.execute("SELECT deliveryID FROM Deliveries;")
+    deliveries_list = cur.fetchall()
+
+    # Get supplies for dropdown
+    cur.execute("SELECT supplyID, supplyBrand, supplyModel FROM Supplies;")
+    supplies_list = cur.fetchall()
+
+    return render_template(
+        "deliveries_supplies.html",
+        deliveries_supplies=ds_data,
+        deliveries=deliveries_list,
+        supplies=supplies_list
+    )
 
 if __name__ == '__main__':
     app.run(port=9313, debug=True)

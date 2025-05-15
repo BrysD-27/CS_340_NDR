@@ -10,7 +10,7 @@
             <th>Recipient</th>
             <th>Driver</th>
             <th>Campaign</th>
-            <th>Date</th>
+            <th>Delivered Date</th>
             <th>Notes</th>
             <th>Actions</th>
         </tr>
@@ -19,10 +19,16 @@
         {% for d in deliveries %}
         <tr>
             <td>{{ d.deliveryID }}</td>
-            <td>{{ d.recipientID }}</td>
-            <td>{{ d.driverID }}</td>
+            <td>{{ d.recipientName }}</td>
+            <td>{{ d.driverName }}</td>
             <td>{{ d.campaignName }}</td>
-            <td>{{ d.deliveredDateTime }}</td>
+            <td>
+                {% if d.deliveredDateTime %}
+                {{ d.deliveredDateTime }}
+                {% else %}
+                <em>Not delivered yet</em>
+                {% endif %}
+            </td>
             <td>{{ d.notes }}</td>
             <td><button disabled>Edit</button></td>
             <td>
@@ -38,9 +44,15 @@
 <form action="/add-delivery" method="POST">
     <select name="recipient" placeholder="Recipient" required>
         <option selected>Select Recipient</option>
+        {% for r in recipients %}
+        <option value="{{ r.recipientID }}">{{ r.organizationName }}</option>
+        {% endfor %}
     </select>
     <select name="driver" placeholder="Driver" required>
         <option selected>Select Driver</option>
+        {% for d in drivers %}
+        <option value="{{ d.driverID }}">{{ d.firstName }} {{ d.lastName }}</option>
+        {% endfor %}
     </select>
     <input name="campaignName" placeholder="Campaign Name">
     <input name="deliveredDateTime" placeholder="Date/Time">
