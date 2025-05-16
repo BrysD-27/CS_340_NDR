@@ -1,0 +1,19 @@
+{% extends "index.html" %}
+{% block title %}Edit Driver{% endblock %}
+{% block content %}
+<h2>Edit Driver {{ driver.driverID }}</h2>
+<form method="POST">
+    <input name="firstName" value="{{ driver.firstName }}" required>
+    <input name="lastName" value="{{ driver.lastName }}" required>
+    <input name="phone" value="{{ driver.phone }}" required>
+    <input name="email" value="{{ driver.email }}" required>
+    <input name="emergencyContactName" value="{{ driver.emergencyContactName }}">
+    <input name="emergencyContactPhone" value="{{ driver.emergencyContactPhone }}">
+    <select name="activeStatus">
+        <option value="1" {% if driver.activeStatus == 1 %}selected{% endif %}>Active</option>
+        <option value="0" {% if driver.activeStatus == 0 %}selected{% endif %}>Inactive</option>
+    </select>
+    <input name="driverDetails" value="{{ driver.driverDetails }}">
+    <button type="submit">Update</button>
+</form>
+{% endblock %}

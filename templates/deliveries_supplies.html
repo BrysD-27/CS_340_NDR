@@ -20,7 +20,11 @@
             <td>{{ ds.deliveryID }}</td>
             <td>{{ ds.supplyBrand }} {{ ds.supplyModel }}</td>
             <td>{{ ds.supplyQuantity }}</td>
-            <td><button disabled>Edit</button></td>
+            <td>
+                <a href="{{ url_for('edit_delivery_supply', id=ds.deliverySupplyID) }}">
+                    <button>Edit</button>
+                </a>
+            </td>
             <td>
                 <form action="/delete-delivery-supply/{{ ds.deliverySupplyID }}" method="POST" style="margin: 0;">
                     <button disabled>Delete</button>

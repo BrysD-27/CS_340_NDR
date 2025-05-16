@@ -28,7 +28,11 @@
             <td>{{ d.emergencyContactName }} / {{ d.emergencyContactPhone }}</td>
             <td>{{ 'Active' if d.activeStatus else 'Inactive' }}</td>
             <td>{{ d.driverDetails }}</td>
-            <td><button disabled>Edit</button></td>
+            <td>
+                <a href="{{ url_for('edit_driver', id=d.driverID) }}">
+                    <button>Edit</button>
+                </a>
+            </td>
             <td>
                 <form action="/delete-driver/{{ d.driverID }}" method="POST" style="margin: 0;"><button
                         disabled>Delete</button></form>

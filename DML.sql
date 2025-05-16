@@ -5,12 +5,12 @@ INSERT INTO Supplies (supplyBrand, supplyModel, supplyCategory, currentInventory
 VALUES (@supplyBrandInput, @supplyModelInput, @supplyCategoryInput, @currentInventoryInput, @unitDescriptionInput);
 
 -- Select all supplies
-SELECT supplyID
-      ,supplyBrand
-      ,supplyModel
-      ,supplyCategory
-      ,currentInventory
-      ,unitDescription
+SELECT supplyID,
+       supplyBrand,
+       supplyModel, 
+       supplyCategory, 
+       currentInventory, 
+       unitDescription
 FROM Supplies;
 
 -- Update a supply record
@@ -34,15 +34,15 @@ INSERT INTO Drivers (firstName, lastName, phone, email, emergencyContactName, em
 VALUES (@firstNameInput, @lastNameInput, @phoneInput, @emailInput, @emergencyContactNameInput, @emergencyContactPhoneInput, @activeStatusInput, @driverDetailsInput);
 
 -- Select all drivers
-SELECT driverID
-      ,firstName
-      ,lastName
-      ,phone
-      ,email
-      ,emergencyContactName
-      ,emergencyContactPhone
-      ,activeStatus
-      ,driverDetails
+SELECT driverID, 
+       firstName, 
+       lastName, 
+       phone, 
+       email, 
+       emergencyContactName, 
+       emergencyContactPhone, 
+       activeStatus, 
+       driverDetails
 FROM Drivers;
 
 -- Update a driver record
@@ -65,20 +65,20 @@ WHERE driverID = @driverIDInput;
 -- Recipients Table Queries
 
 -- Insert a new recipient
-INSERT INTO Recipients (organizationName, streetAddress, city, [state], zip, contactName, email, phone, [description])
+INSERT INTO Recipients (organizationName, streetAddress, city, state, zip, contactName, email, phone, description)
 VALUES (@organizationNameInput, @streetAddressInput, @cityInput, @stateInput, @zipInput, @contactNameInput, @emailInput, @phoneInput, @descriptionInput);
 
 -- Select all recipients
-SELECT recipientID
-      ,organizationName
-      ,streetAddress
-      ,city
-      ,[state]
-      ,zip
-      ,contactName
-      ,email
-      ,phone
-      ,[description]
+SELECT recipientID, 
+       organizationName, 
+       streetAddress, 
+       city, 
+       state, 
+       zip, 
+       contactName, 
+       email, 
+       phone, 
+       description
 FROM Recipients;
 
 -- Update a recipient record
@@ -86,12 +86,12 @@ UPDATE Recipients
 SET organizationName = @organizationNameInput,
     streetAddress = @streetAddressInput,
     city = @cityInput,
-    [state] = @stateInput,
+    state = @stateInput,
     zip = @zipInput,
     contactName = @contactNameInput,
     email = @emailInput,
     phone = @phoneInput,
-    [description] = @descriptionInput
+    description = @descriptionInput
 WHERE recipientID = @recipientIDInput;
 
 -- Delete a recipient
@@ -105,14 +105,18 @@ WHERE recipientID = @recipientIDInput;
 INSERT INTO Deliveries (recipientID, driverID, campaignName, deliveredDateTime, notes)
 VALUES (@recipientIDInput, @driverIDInput, @campaignNameInput, @deliveredDateTimeInput, @notesInput);
 
--- Select all deliveries
-SELECT deliveryID
-      ,recipientID
-      ,driverID
-      ,campaignName
-      ,deliveredDateTime
-      ,notes
-FROM Deliveries;
+-- Select all deliveries with recipient and driver names
+SELECT d.deliveryID,
+       d.recipientID,
+       r.organizationName AS recipientName,
+       d.driverID,
+       CONCAT(dr.firstName, ' ', dr.lastName) AS driverName,
+       d.campaignName,
+       d.deliveredDateTime,
+       d.notes
+FROM Deliveries d
+JOIN Recipients r ON d.recipientID = r.recipientID
+JOIN Drivers dr ON d.driverID = dr.driverID;
 
 -- Update a delivery record
 UPDATE Deliveries
@@ -134,12 +138,15 @@ WHERE deliveryID = @deliveryIDInput;
 INSERT INTO DeliveriesSupplies (deliveryID, supplyID, supplyQuantity)
 VALUES (@deliveryIDInput, @supplyIDInput, @supplyQuantityInput);
 
--- Select all delivery-supply relationships
-SELECT deliverySupplyID
-      ,deliveryID
-      ,supplyID
-      ,supplyQuantity
-FROM DeliveriesSupplies;
+-- Select all delivery-supplies with supply brand and model
+SELECT ds.deliverySupplyID,
+       ds.deliveryID,
+       ds.supplyID,
+       s.supplyBrand,
+       s.supplyModel,
+       ds.supplyQuantity
+FROM DeliveriesSupplies ds
+JOIN Supplies s ON ds.supplyID = s.supplyID;
 
 -- Update a delivery-supply record
 UPDATE DeliveriesSupplies
@@ -151,3 +158,19 @@ WHERE deliverySupplyID = @deliverySupplyIDInput;
 -- Delete a delivery-supply record
 DELETE FROM DeliveriesSupplies
 WHERE deliverySupplyID = @deliverySupplyIDInput;
+
+-- Dynamic dropdown for Deliveries to Recipients
+SELECT recipientID, organizationName
+FROM Recipients;
+
+-- Dynamic dropdown for Deliveries to Drivers
+SELECT driverID, firstName, lastName
+FROM Drivers;
+
+-- Dynamic dropdown for DeliveriesSupplies to Supplies
+SELECT supplyID, supplyBrand, supplyModel
+FROM Supplies;
+
+-- Dynamic dropdown for DeliveriesSupplies to Deliveries
+SELECT deliveryID
+FROM Deliveries;
