@@ -65,7 +65,7 @@ WHERE driverID = @driverIDInput;
 -- Recipients Table Queries
 
 -- Insert a new recipient
-INSERT INTO Recipients (organizationName, streetAddress, city, state, zip, contactName, email, phone, description)
+INSERT INTO Recipients (organizationName, streetAddress, city, [state], zip, contactName, email, phone, [description])
 VALUES (@organizationNameInput, @streetAddressInput, @cityInput, @stateInput, @zipInput, @contactNameInput, @emailInput, @phoneInput, @descriptionInput);
 
 -- Select all recipients
@@ -73,12 +73,12 @@ SELECT recipientID,
        organizationName, 
        streetAddress, 
        city, 
-       state, 
+       [state], 
        zip, 
        contactName, 
        email, 
        phone, 
-       description
+       [description]
 FROM Recipients;
 
 -- Update a recipient record
@@ -86,12 +86,12 @@ UPDATE Recipients
 SET organizationName = @organizationNameInput,
     streetAddress = @streetAddressInput,
     city = @cityInput,
-    state = @stateInput,
+    [state] = @stateInput,
     zip = @zipInput,
     contactName = @contactNameInput,
     email = @emailInput,
     phone = @phoneInput,
-    description = @descriptionInput
+    [description] = @descriptionInput
 WHERE recipientID = @recipientIDInput;
 
 -- Delete a recipient
@@ -159,18 +159,18 @@ WHERE deliverySupplyID = @deliverySupplyIDInput;
 DELETE FROM DeliveriesSupplies
 WHERE deliverySupplyID = @deliverySupplyIDInput;
 
--- Dynamic dropdown for Deliveries to Recipients
+-- Dropdown for Deliveries to Recipients
 SELECT recipientID, organizationName
 FROM Recipients;
 
--- Dynamic dropdown for Deliveries to Drivers
+-- Dropdown for Deliveries to Drivers
 SELECT driverID, firstName, lastName
 FROM Drivers;
 
--- Dynamic dropdown for DeliveriesSupplies to Supplies
+-- Dropdown for DeliveriesSupplies to Supplies
 SELECT supplyID, supplyBrand, supplyModel
 FROM Supplies;
 
--- Dynamic dropdown for DeliveriesSupplies to Deliveries
+-- Dropdown for DeliveriesSupplies to Deliveries
 SELECT deliveryID
 FROM Deliveries;
