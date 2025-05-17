@@ -25,7 +25,11 @@
             <td>{{ s.supplyCategory }}</td>
             <td>{{ s.currentInventory }}</td>
             <td>{{ s.unitDescription }}</td>
-            <td><button disabled>Edit</button></td>
+            <td>
+                <a href="{{ url_for('edit_supply', id=s.supplyID) }}">
+                    <button>Edit</button>
+                </a>
+            </td>
             <td>
                 <form action="/delete-supply/{{ s.supplyID }}" method="POST" style="margin: 0;"><button
                         disabled>Delete</button></form>

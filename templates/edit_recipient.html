@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+{% block title %}Edit Recipient{% endblock %}
+{% block content %}
+<h2>Edit Recipient {{ recipient.recipientID }}</h2>
+<form method="POST">
+    <input name="organizationName" value="{{ recipient.organizationName }}" required>
+    <input name="streetAddress" value="{{ recipient.streetAddress }}" required>
+    <input name="city" value="{{ recipient.city }}" required>
+    <input name="state" value="{{ recipient.state }}" required>
+    <input name="zip" value="{{ recipient.zip }}" required>
+    <input name="contactName" value="{{ recipient.contactName }}">
+    <input name="email" value="{{ recipient.email }}">
+    <input name="phone" value="{{ recipient.phone }}">
+    <input name="description" value="{{ recipient.description }}">
+    <button type="submit">Update</button>
+</form>
+{% endblock %}

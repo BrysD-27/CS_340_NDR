@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+{% block title %}Edit Delivery Supply{% endblock %}
+{% block content %}
+<h2>Edit Delivery Supply {{ ds.deliverySupplyID }}</h2>
+<form method="POST">
+    <label for="deliveryID">Delivery</label>
+    <select name="deliveryID">
+        {% for d in deliveries %}
+        <option value="{{ d.deliveryID }}" {% if d.deliveryID == ds.deliveryID %}selected{% endif %}>
+            {{ d.deliveryID }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <label for="supplyID">Supply</label>
+    <select name="supplyID">
+        {% for s in supplies %}
+        <option value="{{ s.supplyID }}" {% if s.supplyID == ds.supplyID %}selected{% endif %}>
+            {{ s.supplyBrand }} {{ s.supplyModel }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <input name="supplyQuantity" type="number" value="{{ ds.supplyQuantity }}" required>
+    <button type="submit">Update</button>
+</form>
+{% endblock %}

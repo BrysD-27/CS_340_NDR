@@ -1,0 +1,29 @@
+{% extends "index.html" %}
+{% block title %}Edit Delivery{% endblock %}
+{% block content %}
+<h2>Edit Delivery {{ delivery.deliveryID }}</h2>
+<form method="POST">
+    <label for="recipientID">Recipient</label>
+    <select name="recipientID">
+        {% for r in recipients %}
+        <option value="{{ r.recipientID }}" {% if r.recipientID == delivery.recipientID %}selected{% endif %}>
+            {{ r.organizationName }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <label for="driverID">Driver</label>
+    <select name="driverID">
+        {% for d in drivers %}
+        <option value="{{ d.driverID }}" {% if d.driverID == delivery.driverID %}selected{% endif %}>
+            {{ d.firstName }} {{ d.lastName }}
+        </option>
+        {% endfor %}
+    </select>
+
+    <input name="campaignName" value="{{ delivery.campaignName }}" required>
+    <input name="deliveredDateTime" value="{{ delivery.deliveredDateTime }}">
+    <input name="notes" value="{{ delivery.notes }}">
+    <button type="submit">Update</button>
+</form>
+{% endblock %}

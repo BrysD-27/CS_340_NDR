@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+{% block title %}Edit Supply{% endblock %}
+{% block content %}
+<h2>Edit Supply {{ supply.supplyID }}</h2>
+<form method="POST">
+    <input name="supplyBrand" value="{{ supply.supplyBrand }}" required>
+    <input name="supplyModel" value="{{ supply.supplyModel }}" required>
+    <input name="supplyCategory" value="{{ supply.supplyCategory }}" required>
+    <input name="currentInventory" type="number" value="{{ supply.currentInventory }}" required>
+    <input name="unitDescription" value="{{ supply.unitDescription }}">
+    <button type="submit">Update</button>
+</form>
+{% endblock %}
