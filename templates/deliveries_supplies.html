@@ -40,7 +40,7 @@
     <select name="delivery" placeholder="Delivery" required>
         <option selected>Select Delivery</option>
         {% for d in deliveries %}
-            <option value="{{ d.deliveryID }}">{{ d.deliveryID }}</option>
+            <option value="{{ d.deliveryID }}">{{ d.campaignName }}</option>
         {% endfor %}
     </select>
     <select name="supply" placeholder="Supply" required>

@@ -2,8 +2,9 @@
 
 {% block content %}
 <h2>Drivers</h2>
+<a href="{{ url_for('delete_latest_driver') }}" class="reset-btn delete">Delete Driver</a>
 
-<table>
+<table style="margin-top: 1rem;">
     <thead>
         <tr>
             <th>ID</th>
