@@ -43,3 +43,18 @@ tr td {
     max-width: 450px;
     padding: 6px 1rem;
 }
+
+.reset-btn {
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px;
+    text-decoration: none !important;
+}
+
+.reset-btn.db {
+    background-color: goldenrod;
+}
+
+.reset-btn.delete {
+    background-color: crimson;
+}

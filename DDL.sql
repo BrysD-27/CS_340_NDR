@@ -1,5 +1,5 @@
 DELIMITER //
-
+DROP PROCEDURE  IF EXISTS sp_reset_database;
 CREATE PROCEDURE sp_reset_database()
 BEGIN
     -- Disable FK checks and autocommit

@@ -1,7 +1,5 @@
-from flask import Flask, render_template, json, redirect
+from flask import Flask, render_template
 from flask_mysqldb import MySQL
-from flask import request
-import os
 
 app = Flask(__name__)
 
@@ -95,7 +93,7 @@ def deliveries_supplies():
     ds_data = cur.fetchall()
 
     # Get deliveries for dropdown
-    cur.execute("SELECT deliveryID FROM Deliveries;")
+    cur.execute("SELECT deliveryID, campaignName FROM Deliveries;")
     deliveries_list = cur.fetchall()
 
     # Get supplies for dropdown
@@ -194,7 +192,7 @@ def edit_delivery_supply(id):
     ds = cur.fetchone()
 
     # For deliveries dropdowns
-    cur.execute("SELECT deliveryID FROM Deliveries")
+    cur.execute("SELECT deliveryID, campaignName FROM Deliveries")
     deliveries = cur.fetchall()
 
     # For supplies dropdowns
@@ -202,6 +200,31 @@ def edit_delivery_supply(id):
     supplies = cur.fetchall()
 
     return render_template("edit_delivery_supply.html", ds=ds, deliveries=deliveries, supplies=supplies)
+
+
+
+@app.route('/reset-database')
+def reset_database():
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("CALL sp_reset_database();")
+        mysql.connection.commit()
+        return index()
+    except Exception as e:
+        print("Error during RESET:", e)
+        return "Database reset failed", 500
+
+@app.route('/delete-latest-driver')
+def delete_latest_driver():
+    try:
+        cur = mysql.connection.cursor()
+        cur.execute("CALL sp_delete_latest_driver();")
+        mysql.connection.commit()
+        return drivers()
+    except Exception as e:
+        print("Error during DELETE:", e)
+        return "Delete failed", 500
+
 
 if __name__ == '__main__':
     app.run(port=9315, debug=True)
