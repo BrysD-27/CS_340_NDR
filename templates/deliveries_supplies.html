@@ -1,7 +1,37 @@
 {% extends "index.html" %}
 
 {% block content %}
-<h2>Delivery Supplies</h2>
+<h2>Deliveries Supplies</h2>
+<h3 class="mb-0">
+  <button class="accordion-toggle" onclick="toggleAccordion('addDeliverySupplyAccordion')" type="button">
+    Assign a Supply to a Delivery
+    <span id="accordion-arrow">&#9660;</span>
+  </button>
+</h3>
+<div id="addDeliverySupplyAccordion" class="accordion-content">
+  <div class="form-card">
+    <form action="/add-delivery-supply" method="POST" class="form">
+      <div class="form-row">
+        <select name="deliveryID" required>
+          <option value="" selected>Select Delivery</option>
+          {% for d in deliveries %}
+          <option value="{{ d.deliveryID }}">{{ d.campaignName }}</option>
+          {% endfor %}
+        </select>
+        <select name="supplyID" required>
+          <option value="" selected>Select Supply</option>
+          {% for s in supplies %}
+          <option value="{{ s.supplyID }}">{{ s.supplyBrand }} {{ s.supplyModel }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-row">
+        <input name="supplyQuantity" placeholder="Quantity" type="number" min="1" required>
+      </div>
+      <button type="submit" class="btn">Add</button>
+    </form>
+  </div>
+</div>
 
 <table>
     <thead>
@@ -10,7 +40,7 @@
             <th>Delivery</th>
             <th>Supply</th>
             <th>Quantity</th>
-            <th>Actions</th>
+            <th colspan="2">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -21,35 +51,15 @@
             <td>{{ ds.supplyBrand }} {{ ds.supplyModel }}</td>
             <td>{{ ds.supplyQuantity }}</td>
             <td>
-                <a href="{{ url_for('edit_delivery_supply', id=ds.deliverySupplyID) }}">
-                    <button>Edit</button>
-                </a>
+                <a href="{{ url_for('edit_delivery_supply', id=ds.deliverySupplyID) }}" class="btn">Edit</a>
             </td>
             <td>
-                <form action="/delete-delivery-supply/{{ ds.deliverySupplyID }}" method="POST" style="margin: 0;">
-                    <button disabled>Delete</button>
+                <form action="/delete-delivery-supply/{{ ds.deliverySupplyID }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-outline">Delete</button>
                 </form>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
-<h3>Assign a Supply to a Delivery</h3>
-<form action="/add-delivery-supply" method="POST">
-    <select name="delivery" placeholder="Delivery" required>
-        <option selected>Select Delivery</option>
-        {% for d in deliveries %}
-            <option value="{{ d.deliveryID }}">{{ d.campaignName }}</option>
-        {% endfor %}
-    </select>
-    <select name="supply" placeholder="Supply" required>
-        <option selected>Select Supply</option>
-        {% for s in supplies %}
-            <option value="{{ s.supplyID }}">{{ s.supplyBrand }} {{ s.supplyModel }}</option>
-        {% endfor %}
-    </select>
-    <input name="supplyQuantity" type="number" placeholder="Quantity" required>
-    <button type="submit" disabled>Assign</button>
-</form>
 {% endblock %}

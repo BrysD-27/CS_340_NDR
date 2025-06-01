@@ -3,6 +3,30 @@
 {% block content %}
 
 <h2>Supplies</h2>
+<h3 class="mb-0">
+  <button class="accordion-toggle" onclick="toggleAccordion(`addSupplyAccordion`)" type="button">
+    Add Supply
+    <span id="accordion-arrow">&#9660;</span>
+  </button>
+</h3>
+<div id="addSupplyAccordion" class="accordion-content">
+  <div class="form-card">
+    <form action="/add-supply" method="POST" class="form">
+        <div class="form-row">
+            <input name="supplyBrand" placeholder="Brand" type="text" required>
+            <input name="supplyModel" placeholder="Model" type="text" required>
+        </div>
+        <div class="form-row">
+            <input name="supplyCategory" placeholder="Category" type="text" required>
+            <input name="currentInventory" type="number" placeholder="Inventory" min="0" required>
+        </div>
+        <div class="form-row">
+            <textarea name="unitDescription" placeholder="Description" rows="2"></textarea>
+        </div>
+        <button type="submit" class="btn">Add</button>
+    </form>
+  </div>
+</div>
 
 <table>
     <thead>
@@ -13,7 +37,7 @@
             <th>Category</th>
             <th>Inventory</th>
             <th>Description</th>
-            <th>Actions</th>
+            <th colspan="2">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -21,31 +45,20 @@
         <tr>
             <td>{{ s.supplyID }}</td>
             <td>{{ s.supplyBrand }}</td>
-            <td>{{ s.supplyModel }}</td>
+            <td class="supplies-model">{{ s.supplyModel }}</td>
             <td>{{ s.supplyCategory }}</td>
             <td>{{ s.currentInventory }}</td>
-            <td>{{ s.unitDescription }}</td>
+            <td class="desc-cell">{{ s.unitDescription }}</td>
             <td>
-                <a href="{{ url_for('edit_supply', id=s.supplyID) }}">
-                    <button>Edit</button>
-                </a>
+                <a href="{{ url_for('edit_supply', id=s.supplyID) }}" class="btn">Edit</a>
             </td>
             <td>
-                <form action="/delete-supply/{{ s.supplyID }}" method="POST" style="margin: 0;"><button
-                        disabled>Delete</button></form>
+                <form action="/delete-supply/{{ s.supplyID }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-outline">Delete</button>
+                </form>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
-<h3>Add Supply</h3>
-<form action="/add-supply" method="POST">
-    <input name="supplyBrand" placeholder="Brand" required>
-    <input name="supplyModel" placeholder="Model" required>
-    <input name="supplyCategory" placeholder="Category" required>
-    <input name="currentInventory" type="number" placeholder="Inventory" required>
-    <input name="unitDescription" placeholder="Description">
-    <button type="submit" disabled>Add</button>
-</form>
 {% endblock %}

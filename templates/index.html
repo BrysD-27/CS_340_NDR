@@ -1,29 +1,43 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>NDR App - Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+{% block title %}NDR App - Home{% endblock %}
 
-<body>
-    <nav>
-        <div>
-            <h1>Northwest Disaster Relief Transportation Portal</h1>
-            <a href="{{ url_for('index') }}">Home</a>
-            <a href="{{ url_for('supplies') }}">Supplies</a>
-            <a href="{{ url_for('drivers') }}">Drivers</a>
-            <a href="{{ url_for('recipients') }}">Recipients</a>
-            <a href="{{ url_for('deliveries') }}">Deliveries</a>
-            <a href="{{ url_for('deliveries_supplies') }}">Deliveries Supplies</a>
-            <a href="{{ url_for('reset_database') }}" class="reset-btn db">Reset Database</a>
-        </div>
-    </nav>
+{% block content %}
+<div class="hero-section">
+    <h2 class="display-4 mb-2">Welcome to the NDR Transportation Portal</h2>
+    <p class="lead mb-4">
+        Coordinating critical disaster supplies for communities across the Northwest.<br>
+        Track, manage, and celebrate the impact of your deliveries.
+    </p>
+    <a href="{{ url_for('supplies') }}" class="btn btn-hero">View Supplies</a>
+    <a href="{{ url_for('deliveries') }}" class="btn btn-outline btn-hero">View Deliveries</a>
+</div>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-</body>
-
-</html>
+<div class="info-cards">
+    <div class="info-card">
+        <h5>Supplies Managed</h5>
+        <div style="font-size:2.2rem; font-weight:bold;">{{ supplies_count }}</div>
+        <p>Masks, purifiers, blankets and more distributed to date.</p>
+    </div>
+    <div class="info-card">
+        <h5>Active Drivers</h5>
+        <div style="font-size:2.2rem; font-weight:bold;">{{ drivers_count }}</div>
+        <p>Dedicated volunteers ensuring fast, reliable delivery.</p>
+    </div>
+    <div class="info-card">
+        <h5>Deliveries Completed</h5>
+        <div style="font-size:2.2rem; font-weight:bold;">{{ deliveries_count }}</div>
+        <p>Impactful campaigns and relief operations supported.</p>
+    </div>
+</div>
+<div style="text-align:center; margin:2rem auto; max-width:700px;">
+    <h3>Our Mission</h3>
+    <p>
+        <strong>Northwest Disaster Relief</strong> <em>(NDR)</em> empowers communities by ensuring vital supplies reach
+        those in need, fast.<br><br>
+        With real-time inventory and delivery management, we bring clarity, speed, and transparency to disaster
+        response.<br>
+        Thank you for making a difference!
+    </p>
+</div>
+{% endblock %}

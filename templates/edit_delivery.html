@@ -2,28 +2,52 @@
 {% block title %}Edit Delivery{% endblock %}
 {% block content %}
 <h2>Edit Delivery {{ delivery.deliveryID }}</h2>
-<form method="POST">
-    <label for="recipientID">Recipient</label>
-    <select name="recipientID">
-        {% for r in recipients %}
-        <option value="{{ r.recipientID }}" {% if r.recipientID == delivery.recipientID %}selected{% endif %}>
-            {{ r.organizationName }}
-        </option>
-        {% endfor %}
-    </select>
+<div class="form-card">
+    <form method="POST" action="/update-delivery/{{ delivery.deliveryID }}" class="form">
+        <div class="form-row">
+            <div style="flex:1; min-width:160px;">
+                <label for="recipientID">Recipient</label>
+                <select id="recipientID" name="recipientID" required>
+                    {% for r in recipients %}
+                    <option value="{{ r.recipientID }}" {% if r.recipientID==delivery.recipientID %}selected{% endif %}>
+                        {{ r.organizationName }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="flex:1; min-width:160px;">
+                <label for="driverID">Driver</label>
+                <select id="driverID" name="driverID" required>
+                    {% for d in drivers %}
+                    <option value="{{ d.driverID }}" {% if d.driverID==delivery.driverID %}selected{% endif %}>
+                        {{ d.firstName }} {{ d.lastName }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div style="flex:1;">
+                <label for="campaignName">Campaign Name</label>
+                <input id="campaignName" name="campaignName" value="{{ delivery.campaignName }}" type="text" required>
+            </div>
+            <div style="flex:1;">
+                <label for="deliveredDateTime">Delivered Date/Time</label>
+                <input id="deliveredDateTime" name="deliveredDateTime" type="datetime-local"
+                    value="{{ delivery.deliveredDateTime|default('', true) }}">
 
-    <label for="driverID">Driver</label>
-    <select name="driverID">
-        {% for d in drivers %}
-        <option value="{{ d.driverID }}" {% if d.driverID == delivery.driverID %}selected{% endif %}>
-            {{ d.firstName }} {{ d.lastName }}
-        </option>
-        {% endfor %}
-    </select>
-
-    <input name="campaignName" value="{{ delivery.campaignName }}" required>
-    <input name="deliveredDateTime" value="{{ delivery.deliveredDateTime }}">
-    <input name="notes" value="{{ delivery.notes }}">
-    <button type="submit">Update</button>
-</form>
+            </div>
+        </div>
+        <div class="form-row">
+            <div style="flex:1;">
+                <label for="notes">Notes</label>
+                <textarea id="notes" name="notes" rows="2">{{ delivery.notes }}</textarea>
+            </div>
+        </div>
+        <div class="form-row">
+            <button type="submit" class="btn">Update</button>
+            <a href="{{ url_for('deliveries') }}" class="btn btn-outline" style="margin-left:1rem;">Cancel</a>
+        </div>
+    </form>
+</div>
 {% endblock %}

@@ -1,27 +1,42 @@
 {% extends "index.html" %}
 {% block title %}Edit Delivery Supply{% endblock %}
+
 {% block content %}
 <h2>Edit Delivery Supply {{ ds.deliverySupplyID }}</h2>
-<form method="POST">
-    <label for="deliveryID">Delivery</label>
-    <select name="deliveryID">
-        {% for d in deliveries %}
-        <option value="{{ d.deliveryID }}" {% if d.deliveryID == ds.deliveryID %}selected{% endif %}>
+<div class="form-card">
+  <form action="/update-delivery-supply/{{ ds.deliverySupplyID }}" method="POST" class="form">
+    <div class="form-row">
+      <div style="flex:1; min-width:180px;">
+        <label for="deliveryID">Delivery</label>
+        <select id="deliveryID" name="deliveryID" required>
+          {% for d in deliveries %}
+          <option value="{{ d.deliveryID }}" {% if d.deliveryID == ds.deliveryID %}selected{% endif %}>
             {{ d.campaignName }}
-        </option>
-        {% endfor %}
-    </select>
-
-    <label for="supplyID">Supply</label>
-    <select name="supplyID">
-        {% for s in supplies %}
-        <option value="{{ s.supplyID }}" {% if s.supplyID == ds.supplyID %}selected{% endif %}>
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+      <div style="flex:1; min-width:180px;">
+        <label for="supplyID">Supply</label>
+        <select id="supplyID" name="supplyID" required>
+          {% for s in supplies %}
+          <option value="{{ s.supplyID }}" {% if s.supplyID == ds.supplyID %}selected{% endif %}>
             {{ s.supplyBrand }} {{ s.supplyModel }}
-        </option>
-        {% endfor %}
-    </select>
-
-    <input name="supplyQuantity" type="number" value="{{ ds.supplyQuantity }}" required>
-    <button type="submit">Update</button>
-</form>
+          </option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div style="flex:1; min-width:160px;">
+        <label for="supplyQuantity">Quantity</label>
+        <input id="supplyQuantity" name="supplyQuantity" type="number" min="1" value="{{ ds.supplyQuantity }}" required>
+      </div>
+    </div>
+    <div class="form-row">
+      <button type="submit" class="btn">Update</button>
+      <a href="{{ url_for('deliveries_supplies') }}" class="btn btn-outline" style="margin-left:1rem;">Cancel</a>
+    </div>
+  </form>
+</div>
 {% endblock %}

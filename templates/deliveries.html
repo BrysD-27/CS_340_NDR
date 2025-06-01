@@ -2,6 +2,40 @@
 
 {% block content %}
 <h2>Deliveries</h2>
+<h3 class="mb-0">
+  <button class="accordion-toggle" onclick="toggleAccordion('addDeliveryAccordion')" type="button">
+    Add Delivery
+    <span id="accordion-arrow">&#9660;</span>
+  </button>
+</h3>
+<div id="addDeliveryAccordion" class="accordion-content">
+  <div class="form-card">
+    <form action="/add-delivery" method="POST" class="form">
+      <div class="form-row">
+        <select name="recipientID" required>
+          <option value="" selected>Select Recipient</option>
+          {% for r in recipients %}
+          <option value="{{ r.recipientID }}">{{ r.organizationName }}</option>
+          {% endfor %}
+        </select>
+        <select name="driverID" required>
+          <option value="" selected>Select Driver</option>
+          {% for d in drivers %}
+          <option value="{{ d.driverID }}">{{ d.firstName }} {{ d.lastName }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-row">
+        <input name="campaignName" placeholder="Campaign Name" type="text">
+        <input name="deliveredDateTime" type="datetime-local" placeholder="Date/Time (YYYY-MM-DD HH:MM:SS)">
+      </div>
+      <div class="form-row">
+        <textarea name="notes" placeholder="Notes" rows="2"></textarea>
+      </div>
+      <button type="submit" class="btn">Add</button>
+    </form>
+  </div>
+</div>
 
 <table>
     <thead>
@@ -12,7 +46,7 @@
             <th>Campaign</th>
             <th>Delivered Date</th>
             <th>Notes</th>
-            <th>Actions</th>
+            <th colspan="2">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -24,43 +58,22 @@
             <td>{{ d.campaignName }}</td>
             <td>
                 {% if d.deliveredDateTime %}
-                {{ d.deliveredDateTime }}
+                {{ d.deliveredDateTime.strftime('%b %d, %Y, %-I:%M %p') }}
                 {% else %}
                 <em>Not delivered yet</em>
                 {% endif %}
             </td>
             <td>{{ d.notes }}</td>
             <td>
-                <a href="{{ url_for('edit_delivery', id=d.deliveryID) }}">
-                    <button>Edit</button>
-                </a>
+                <a href="{{ url_for('edit_delivery', id=d.deliveryID) }}" class="btn">Edit</a>
             </td>
             <td>
-                <form action="/delete-delivery/{{ d.deliveryID }}" method="POST" style="margin: 0;"><button
-                        disabled>Delete</button></form>
+                <form action="/delete-delivery/{{ d.deliveryID }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-outline">Delete</button>
+                </form>
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
-
-<h3>Add Delivery</h3>
-<form action="/add-delivery" method="POST">
-    <select name="recipient" placeholder="Recipient" required>
-        <option selected>Select Recipient</option>
-        {% for r in recipients %}
-        <option value="{{ r.recipientID }}">{{ r.organizationName }}</option>
-        {% endfor %}
-    </select>
-    <select name="driver" placeholder="Driver" required>
-        <option selected>Select Driver</option>
-        {% for d in drivers %}
-        <option value="{{ d.driverID }}">{{ d.firstName }} {{ d.lastName }}</option>
-        {% endfor %}
-    </select>
-    <input name="campaignName" placeholder="Campaign Name">
-    <input name="deliveredDateTime" placeholder="Date/Time">
-    <input name="notes" placeholder="Notes">
-    <button type="submit" disabled>Add</button>
-</form>
 {% endblock %}
