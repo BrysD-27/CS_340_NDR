@@ -11,7 +11,7 @@
         <select id="deliveryID" name="deliveryID" required>
           {% for d in deliveries %}
           <option value="{{ d.deliveryID }}" {% if d.deliveryID == ds.deliveryID %}selected{% endif %}>
-            {{ d.campaignName }}
+            {{ d.deliveryID }} - {{ d.campaignName }}
           </option>
           {% endfor %}
         </select>
