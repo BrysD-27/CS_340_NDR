@@ -15,7 +15,7 @@
         <select name="deliveryID" required>
           <option value="" selected>Select Delivery</option>
           {% for d in deliveries %}
-          <option value="{{ d.deliveryID }}">{{ d.campaignName }}</option>
+          <option value="{{ d.deliveryID }}">{{ d.deliveryID}} - {{ d.campaignName }}</option>
           {% endfor %}
         </select>
         <select name="supplyID" required>
@@ -47,7 +47,7 @@
         {% for ds in deliveries_supplies %}
         <tr>
             <td>{{ ds.deliverySupplyID }}</td>
-            <td>{{ ds.deliveryID }}</td>
+            <td>{{ ds.deliveryID }} - {{ ds.campaignName }}</td>
             <td>{{ ds.supplyBrand }} {{ ds.supplyModel }}</td>
             <td>{{ ds.supplyQuantity }}</td>
             <td>

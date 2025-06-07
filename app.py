@@ -1,3 +1,6 @@
+# This file cites and replicates similarly to:
+# INTRODUCTION TO DATABASES (CS_340_400_S2025) Activity 2 Flask Starter Code
+
 from flask import Flask, flash, redirect, render_template, request, url_for
 from flask_mysqldb import MySQL
 
@@ -13,19 +16,17 @@ app.config['SECRET_KEY'] = 'nothing'
 
 mysql = MySQL(app)
 
+# Home Dashboard Route   
 @app.route('/')
 def index():
     cur = mysql.connection.cursor()
-    # Supplies managed (sum of current inventory)
-    cur.execute("SELECT COALESCE(SUM(currentInventory), 0) AS total_supplies FROM Supplies")
+    cur.execute("CALL sp_get_total_supplies()")
     total_supplies = cur.fetchone()['total_supplies']
 
-    # Active drivers
-    cur.execute("SELECT COUNT(*) AS active_drivers FROM Drivers WHERE activeStatus = TRUE")
+    cur.execute("CALL sp_get_active_drivers()")
     active_drivers = cur.fetchone()['active_drivers']
 
-    # Completed deliveries
-    cur.execute("SELECT COUNT(*) AS completed_deliveries FROM Deliveries WHERE deliveredDateTime IS NOT NULL")
+    cur.execute("CALL sp_get_completed_deliveries()")
     completed_deliveries = cur.fetchone()['completed_deliveries']
 
     return render_template(
@@ -36,14 +37,13 @@ def index():
     )
 
 # SUPPLY CRUD METHODS
+# Base Supply Route - SELECT all Supplies
 @app.route('/supplies')
 def supplies():
     cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT supplyID, supplyBrand, supplyModel, supplyCategory, currentInventory, unitDescription
-        FROM Supplies;
-    """)
+    cur.callproc('sp_get_supplies')
     supplies_data = cur.fetchall()
+
     return render_template("supplies.html", supplies=supplies_data)
 
 # Create Supply
@@ -56,10 +56,7 @@ def add_supply():
         inventory = request.form['currentInventory']
         description = request.form.get('unitDescription', None)
         cur = mysql.connection.cursor()
-        cur.execute("""
-            INSERT INTO Supplies (supplyBrand, supplyModel, supplyCategory, currentInventory, unitDescription)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (brand, model, category, inventory, description))
+        cur.callproc('sp_add_supply', (brand, model, category, inventory, description))
         mysql.connection.commit()
         flash('Supply added!', 'success')
     except Exception as e:
@@ -71,13 +68,9 @@ def add_supply():
 @app.route("/edit-supply/<int:id>")
 def edit_supply(id):
     cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT supplyID, supplyBrand, supplyModel, supplyCategory, currentInventory, unitDescription
-        FROM Supplies
-        WHERE supplyID = %s
-    """, (id,))
-
+    cur.callproc('sp_get_supply_by_id', (id,))
     supply = cur.fetchone()
+
     return render_template("edit_supply.html", supply=supply)
 
 # Update Supply
@@ -90,11 +83,7 @@ def update_supply(id):
         inventory = request.form['currentInventory']
         description = request.form.get('unitDescription', None)
         cur = mysql.connection.cursor()
-        cur.execute("""
-            UPDATE Supplies
-            SET supplyBrand=%s, supplyModel=%s, supplyCategory=%s, currentInventory=%s, unitDescription=%s
-            WHERE supplyID=%s
-        """, (brand, model, category, inventory, description, id))
+        cur.callproc('sp_update_supply', (id, brand, model, category, inventory, description))
         mysql.connection.commit()
         flash('Supply updated!', 'success')
     except Exception as e:
@@ -108,7 +97,7 @@ def update_supply(id):
 def delete_supply(id):
     try:
         cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM Supplies WHERE supplyID = %s", (id,))
+        cur.callproc('sp_delete_supply', (id,))
         mysql.connection.commit()
         flash('Supply deleted!', 'success')
     except Exception as e:
@@ -116,16 +105,15 @@ def delete_supply(id):
         flash('Error deleting supply.', 'danger')
     return redirect(url_for('supplies'))
 
+
 # DRIVERS CRUD METHODS
+# Base Driver Route - SELECT all Drivers
 @app.route('/drivers')
 def drivers():
     cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT driverID, firstName, lastName, phone, email, emergencyContactName,
-               emergencyContactPhone, activeStatus, driverDetails
-        FROM Drivers;
-    """)
+    cur.callproc('sp_get_drivers')
     drivers_data = cur.fetchall()
+
     return render_template("drivers.html", drivers=drivers_data)
 
 # Create Driver
@@ -138,15 +126,12 @@ def add_driver():
         email = request.form['email']
         emergency_name = request.form.get('emergencyContactName')
         emergency_phone = request.form.get('emergencyContactPhone')
-        active = bool(request.form.get('activeStatus', False))
+        active = 1 if request.form.get('activeStatus') else 0
         details = request.form.get('driverDetails', '')
         cur = mysql.connection.cursor()
-        cur.execute("""
-            INSERT INTO Drivers
-                (firstName, lastName, phone, email, emergencyContactName, emergencyContactPhone, activeStatus, driverDetails)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-        """, (first, last, phone, email, emergency_name, emergency_phone, active, details))
+        cur.callproc('sp_add_driver', (first, last, phone, email, emergency_name, emergency_phone, active, details))
         mysql.connection.commit()
+
         flash('Driver added!', 'success')
     except Exception as e:
         print("Error adding driver:", e)
@@ -157,14 +142,9 @@ def add_driver():
 @app.route("/edit-driver/<int:id>")
 def edit_driver(id):
     cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT driverID, firstName, lastName, phone, email, emergencyContactName,
-               emergencyContactPhone, activeStatus, driverDetails
-        FROM Drivers
-        WHERE driverID = %s
-    """, (id,))
-
+    cur.callproc('sp_get_driver_by_id', (id,))
     driver = cur.fetchone()
+
     return render_template("edit_driver.html", driver=driver)
 
 # Update Driver
@@ -177,16 +157,10 @@ def update_driver(id):
         email = request.form['email']
         emergency_name = request.form.get('emergencyContactName')
         emergency_phone = request.form.get('emergencyContactPhone')
-        active = bool(request.form.get('activeStatus', False))
+        active = 1 if request.form.get('activeStatus') else 0
         details = request.form.get('driverDetails', '')
         cur = mysql.connection.cursor()
-        cur.execute("""
-            UPDATE Drivers
-            SET firstName=%s, lastName=%s, phone=%s, email=%s,
-                emergencyContactName=%s, emergencyContactPhone=%s,
-                activeStatus=%s, driverDetails=%s
-            WHERE driverID=%s
-        """, (first, last, phone, email, emergency_name, emergency_phone, active, details, id))
+        cur.callproc('sp_update_driver', (id, first, last, phone, email, emergency_name, emergency_phone, active, details))
         mysql.connection.commit()
         flash('Driver updated!', 'success')
     except Exception as e:
@@ -199,7 +173,7 @@ def update_driver(id):
 def delete_driver(id):
     try:
         cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM Drivers WHERE driverID = %s", (id,))
+        cur.callproc('sp_delete_driver', (id,))
         mysql.connection.commit()
         flash('Driver deleted!', 'success')
     except Exception as e:
@@ -208,15 +182,13 @@ def delete_driver(id):
     return redirect(url_for('drivers'))
 
 # RECIPIENTS CRUD METHODS
+# Base Recipient Route - SELECT all Recipients
 @app.route('/recipients')
 def recipients():
     cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT recipientID, organizationName, streetAddress, city, state, zip,
-               contactName, email, phone, description
-        FROM Recipients;
-    """)
+    cur.callproc('sp_get_recipients')
     recipients_data = cur.fetchall()
+
     return render_template("recipients.html", recipients=recipients_data)
 
 # Add Recipient
@@ -233,11 +205,7 @@ def add_recipient():
         phone = request.form.get('phone')
         description = request.form.get('description')
         cur = mysql.connection.cursor()
-        cur.execute("""
-            INSERT INTO Recipients
-                (organizationName, streetAddress, city, state, zip, contactName, email, phone, description)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
-        """, (organization, address, city, state, zip_code, contact, email, phone, description))
+        cur.callproc('sp_add_recipient', (organization, address, city, state, zip_code, contact, email, phone, description))
         mysql.connection.commit()
         flash('Recipient added!', 'success')
     except Exception as e:
@@ -249,13 +217,7 @@ def add_recipient():
 @app.route("/edit-recipient/<int:id>")
 def edit_recipient(id):
     cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT recipientID, organizationName, streetAddress, city, state, zip,
-               contactName, email, phone, description
-        FROM Recipients
-        WHERE recipientID = %s
-    """, (id,))
-
+    cur.callproc('sp_get_recipient_by_id', (id,))
     recipient = cur.fetchone()
     return render_template("edit_recipient.html", recipient=recipient)
 
@@ -273,12 +235,7 @@ def update_recipient(id):
         phone = request.form.get('phone')
         description = request.form.get('description')
         cur = mysql.connection.cursor()
-        cur.execute("""
-            UPDATE Recipients
-            SET organizationName=%s, streetAddress=%s, city=%s, state=%s, zip=%s,
-                contactName=%s, email=%s, phone=%s, description=%s
-            WHERE recipientID=%s
-        """, (organization, address, city, state, zip_code, contact, email, phone, description, id))
+        cur.callproc('sp_update_recipient', (id, organization, address, city, state, zip_code, contact, email, phone, description))
         mysql.connection.commit()
         flash('Recipient updated!', 'success')
     except Exception as e:
@@ -291,7 +248,7 @@ def update_recipient(id):
 def delete_recipient(id):
     try:
         cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM Recipients WHERE recipientID = %s", (id,))
+        cur.callproc('sp_delete_recipient', (id,))
         mysql.connection.commit()
         flash('Recipient deleted!', 'success')
     except Exception as e:
@@ -299,33 +256,30 @@ def delete_recipient(id):
         flash('Error deleting recipient.', 'danger')
     return redirect(url_for('recipients'))
 
+# DELIVERIES CRUD METHODS
+# Base Delivery Route - SELECT all Deliveries
 @app.route('/deliveries')
 def deliveries():
-    cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT d.deliveryID,
-            r.organizationName AS recipientName,
-            CONCAT(dr.firstName, ' ', dr.lastName) AS driverName,
-            d.campaignName, d.deliveredDateTime, d.notes
-        FROM Deliveries d
-        JOIN Recipients r ON d.recipientID = r.recipientID
-        JOIN Drivers dr ON d.driverID = dr.driverID;
-    """)
-    deliveries_data = cur.fetchall()
+    cur1 = mysql.connection.cursor()
+    cur1.callproc('sp_get_deliveries')
+    deliveries_data = cur1.fetchall()
+    cur1.close()
 
-    # Get recipients for dropdown
-    cur.execute("SELECT recipientID, organizationName FROM Recipients;")
-    recipients_list = cur.fetchall()
+    cur2 = mysql.connection.cursor()
+    cur2.callproc('sp_get_recipient_dropdown')
+    recipients = cur2.fetchall()
+    cur2.close()
 
-    # Get drivers for dropdown
-    cur.execute("SELECT driverID, firstName, lastName FROM Drivers WHERE activeStatus = 1;")
-    drivers_list = cur.fetchall()
+    cur3 = mysql.connection.cursor()
+    cur3.callproc('sp_get_active_driver_dropdown')
+    drivers = cur3.fetchall()
+    cur3.close()
 
     return render_template(
         "deliveries.html",
         deliveries=deliveries_data,
-        recipients=recipients_list,
-        drivers=drivers_list
+        recipients=recipients,
+        drivers=drivers
     )
 
 # Create Delivery
@@ -338,10 +292,7 @@ def add_delivery():
         date_time = request.form.get('deliveredDateTime')
         notes = request.form.get('notes')
         cur = mysql.connection.cursor()
-        cur.execute("""
-            INSERT INTO Deliveries (recipientID, driverID, campaignName, deliveredDateTime, notes)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (recipientID, driverID, campaign, date_time, notes))
+        cur.callproc('sp_add_delivery', (recipientID, driverID, campaign, date_time, notes))
         mysql.connection.commit()
         flash('Delivery added!', 'success')
     except Exception as e:
@@ -352,31 +303,20 @@ def add_delivery():
 # Route to Edit Delivery
 @app.route("/edit-delivery/<int:id>")
 def edit_delivery(id):
-    cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT d.deliveryID,
-               d.recipientID,
-               r.organizationName AS recipientName,
-               d.driverID,
-               CONCAT(dr.firstName, ' ', dr.lastName) AS driverName,
-               d.campaignName,
-               d.deliveredDateTime,
-               d.notes
-        FROM Deliveries d
-        JOIN Recipients r ON d.recipientID = r.recipientID
-        JOIN Drivers dr ON d.driverID = dr.driverID
-        WHERE d.deliveryID = %s
-    """, (id,))
+    cur1 = mysql.connection.cursor()
+    cur1.callproc('sp_get_delivery_by_id', (id,))
+    delivery = cur1.fetchone()
+    cur1.close()
 
-    delivery = cur.fetchone()
+    cur2 = mysql.connection.cursor()
+    cur2.callproc('sp_get_recipient_dropdown')
+    recipients = cur2.fetchall()
+    cur2.close()
 
-    # Get recipients for dropdown
-    cur.execute("SELECT recipientID, organizationName FROM Recipients")
-    recipients = cur.fetchall()
-
-    # Get drivers for dropdown
-    cur.execute("SELECT driverID, firstName, lastName FROM Drivers")
-    drivers = cur.fetchall()
+    cur3 = mysql.connection.cursor()
+    cur3.callproc('sp_get_active_driver_dropdown')
+    drivers = cur3.fetchall()
+    cur3.close()
 
     return render_template("edit_delivery.html", delivery=delivery, recipients=recipients, drivers=drivers)
 
@@ -390,11 +330,7 @@ def update_delivery(id):
         date_time = request.form.get('deliveredDateTime')
         notes = request.form.get('notes')
         cur = mysql.connection.cursor()
-        cur.execute("""
-            UPDATE Deliveries
-            SET recipientID=%s, driverID=%s, campaignName=%s, deliveredDateTime=%s, notes=%s
-            WHERE deliveryID=%s
-        """, (recipientID, driverID, campaign, date_time, notes, id))
+        cur.callproc('sp_update_delivery', (id, recipientID, driverID, campaign, date_time, notes))
         mysql.connection.commit()
         flash('Delivery updated!', 'success')
     except Exception as e:
@@ -407,7 +343,7 @@ def update_delivery(id):
 def delete_delivery(id):
     try:
         cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM Deliveries WHERE deliveryID = %s", (id,))
+        cur.callproc('sp_delete_delivery', (id,))
         mysql.connection.commit()
         flash('Delivery deleted!', 'success')
     except Exception as e:
@@ -415,61 +351,31 @@ def delete_delivery(id):
         flash('Error deleting delivery.', 'danger')
     return redirect(url_for('deliveries'))
 
+# DELIVERIESSUPPLIES CRUD METHODS
+# Base Deliveries Supplies Route - SELECT all Deliveries Supplies
 @app.route('/deliveries-supplies')
 def deliveries_supplies():
-    cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT ds.deliverySupplyID,
-               ds.deliveryID,
-               s.supplyBrand,
-               s.supplyModel,
-               ds.supplyQuantity
-        FROM DeliveriesSupplies ds
-        JOIN Supplies s ON ds.supplyID = s.supplyID;
-    """)
+    cur1 = mysql.connection.cursor()
+    cur1.callproc('sp_get_deliveries_supplies')
+    ds_data = cur1.fetchall()
+    cur1.close()
 
-    ds_data = cur.fetchall()
+    cur2 = mysql.connection.cursor()
+    cur2.callproc('sp_get_delivery_dropdown')
+    deliveries = cur2.fetchall()
+    cur2.close()
 
-    # Get deliveries for dropdown
-    cur.execute("SELECT deliveryID, campaignName FROM Deliveries;")
-    deliveries_list = cur.fetchall()
-
-    # Get supplies for dropdown
-    cur.execute("SELECT supplyID, supplyBrand, supplyModel FROM Supplies;")
-    supplies_list = cur.fetchall()
+    cur3 = mysql.connection.cursor()
+    cur3.callproc('sp_get_supply_dropdown')
+    supplies = cur3.fetchall()
+    cur3.close()
 
     return render_template(
         "deliveries_supplies.html",
         deliveries_supplies=ds_data,
-        deliveries=deliveries_list,
-        supplies=supplies_list
+        deliveries=deliveries,
+        supplies=supplies
     )
-
-@app.route("/edit-delivery-supply/<int:id>")
-def edit_delivery_supply(id):
-    cur = mysql.connection.cursor()
-    cur.execute("""
-        SELECT ds.deliverySupplyID,
-               ds.deliveryID,
-               ds.supplyID,
-               s.supplyBrand,
-               s.supplyModel,
-               ds.supplyQuantity
-        FROM DeliveriesSupplies ds
-        JOIN Supplies s ON ds.supplyID = s.supplyID
-        WHERE ds.deliverySupplyID = %s
-    """, (id,))
-    ds = cur.fetchone()
-
-    # For deliveries dropdowns
-    cur.execute("SELECT deliveryID, campaignName FROM Deliveries")
-    deliveries = cur.fetchall()
-
-    # For supplies dropdowns
-    cur.execute("SELECT supplyID, supplyBrand, supplyModel FROM Supplies")
-    supplies = cur.fetchall()
-
-    return render_template("edit_delivery_supply.html", ds=ds, deliveries=deliveries, supplies=supplies)
 
 # Create Delivery Supply
 @app.route('/add-delivery-supply', methods=['POST'])
@@ -486,6 +392,26 @@ def add_delivery_supply():
         print("Error adding delivery supply:", e)
         flash('Error adding delivery supply.', 'danger')
     return redirect(url_for('deliveries_supplies'))
+
+# Route to Edit Delivery Supply
+@app.route("/edit-delivery-supply/<int:id>")
+def edit_delivery_supply(id):
+    cur1 = mysql.connection.cursor()
+    cur1.callproc('sp_get_delivery_supply_by_id', (id,))
+    ds = cur1.fetchone()
+    cur1.close()
+
+    cur2 = mysql.connection.cursor()
+    cur2.callproc('sp_get_delivery_dropdown')
+    deliveries = cur2.fetchall()
+    cur2.close()
+
+    cur3 = mysql.connection.cursor()
+    cur3.callproc('sp_get_supply_dropdown')
+    supplies = cur3.fetchall()
+    cur3.close()
+
+    return render_template("edit_delivery_supply.html", ds=ds, deliveries=deliveries, supplies=supplies)
 
 # Update Delivery Supply
 @app.route('/update-delivery-supply/<int:id>', methods=['POST'])
@@ -522,22 +448,12 @@ def reset_database():
         cur = mysql.connection.cursor()
         cur.execute("CALL sp_reset_database();")
         mysql.connection.commit()
+        flash('Database reset!', 'success')
         return index()
     except Exception as e:
         print("Error during RESET:", e)
+        flash('Error reseting database.', 'danger')
         return "Database reset failed", 500
-
-@app.route('/delete-latest-driver')
-def delete_latest_driver():
-    try:
-        cur = mysql.connection.cursor()
-        cur.execute("CALL sp_delete_latest_driver();")
-        mysql.connection.commit()
-        return drivers()
-    except Exception as e:
-        print("Error during DELETE:", e)
-        return "Delete failed", 500
-
 
 if __name__ == '__main__':
     app.run(port=4200, debug=True)
