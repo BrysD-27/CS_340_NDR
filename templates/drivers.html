@@ -1,0 +1,79 @@
+{% extends "index.html" %}
+
+{% block content %}
+<h2>Drivers</h2>
+<h3 class="mb-0">
+    <button class="accordion-toggle" onclick="toggleAccordion('addDriverAccordion')" type="button">
+        Add Driver
+        <span id="accordion-arrow">&#9660;</span>
+    </button>
+</h3>
+<div id="addDriverAccordion" class="accordion-content">
+    <div class="form-card">
+        <form action="/add-driver" method="POST" class="form">
+            <div class="form-row">
+                <input name="firstName" placeholder="First Name" type="text" required>
+                <input name="lastName" placeholder="Last Name" type="text" required>
+            </div>
+            <div class="form-row">
+                <input name="phone" placeholder="Phone" type="tel" required>
+                <input name="email" placeholder="Email" type="email" required>
+            </div>
+            <div class="form-row">
+                <input name="emergencyContactName" placeholder="Emergency Contact Name" type="text">
+                <input name="emergencyContactPhone" placeholder="Emergency Contact Phone" type="tel">
+            </div>
+            <div class="form-row">
+                <label class="checkbox-container" style="margin-top:0.8em;">
+                    <input id="activeStatus" name="activeStatus" type="checkbox">
+                    <span class="custom-checkbox"></span>
+                    Active
+                </label>
+            </div>
+            <div class="form-row">
+                <textarea name="driverDetails" placeholder="Details" rows="2" style="flex:2;"></textarea>
+
+            </div>
+            <button type="submit" class="btn">Add</button>
+        </form>
+    </div>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>First</th>
+            <th>Last</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Emergency Contact</th>
+            <th>Status</th>
+            <th>Notes</th>
+            <th colspan="2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in drivers %}
+        <tr>
+            <td>{{ d.driverID }}</td>
+            <td>{{ d.firstName }}</td>
+            <td>{{ d.lastName }}</td>
+            <td class="phone">{{ d.phone }}</td>
+            <td>{{ d.email }}</td>
+            <td class="emergency-contact">{{ d.emergencyContactName }} / {{ d.emergencyContactPhone }}</td>
+            <td>{{ 'Active' if d.activeStatus else 'Inactive' }}</td>
+            <td>{{ d.driverDetails }}</td>
+            <td>
+                <a href="{{ url_for('edit_driver', id=d.driverID) }}" class="btn">Edit</a>
+            </td>
+            <td>
+                <form action="/delete-driver/{{ d.driverID }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-outline">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

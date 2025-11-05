@@ -1,0 +1,60 @@
+{% extends "index.html" %}
+{% block title %}Edit Recipient{% endblock %}
+
+{% block content %}
+<h2>Edit Recipient {{ recipient.recipientID }}</h2>
+<div class="form-card">
+  <form action="/update-recipient/{{ recipient.recipientID }}" method="POST" class="form">
+    <div class="form-row">
+      <div style="flex:1; min-width:130px;">
+        <label for="organizationName">Organization Name</label>
+        <input id="organizationName" name="organizationName" value="{{ recipient.organizationName }}" placeholder="Organization Name" type="text" required>
+      </div>
+      <div style="flex:1; min-width:130px;">
+        <label for="contactName">Contact Name</label>
+        <input id="contactName" name="contactName" value="{{ recipient.contactName }}" placeholder="Contact Name" type="text" required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div style="flex:1; min-width:130px;">
+        <label for="streetAddress">Street Address</label>
+        <input id="streetAddress" name="streetAddress" value="{{ recipient.streetAddress }}" placeholder="Street Address" type="text" required>
+      </div>
+      <div style="flex:1; min-width:130px;">
+        <label for="city">City</label>
+        <input id="city" name="city" value="{{ recipient.city }}" placeholder="City" type="text" required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div style="flex:1; min-width:70px;">
+        <label for="state">State</label>
+        <input id="state" name="state" value="{{ recipient.state }}" placeholder="State" type="text" maxlength="2" required>
+      </div>
+      <div style="flex:1; min-width:100px;">
+        <label for="zip">ZIP</label>
+        <input id="zip" name="zip" value="{{ recipient.zip }}" placeholder="ZIP" type="text" maxlength="10" required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div style="flex:1; min-width:130px;">
+        <label for="email">Email</label>
+        <input id="email" name="email" value="{{ recipient.email }}" placeholder="Email" type="email">
+      </div>
+      <div style="flex:1; min-width:130px;">
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone" value="{{ recipient.phone }}" placeholder="Phone" type="tel">
+      </div>
+    </div>
+    <div class="form-row">
+      <div style="flex:1; min-width:200px;">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" placeholder="Description" rows="2">{{ recipient.description }}</textarea>
+      </div>
+    </div>
+    <div class="form-row">
+      <button type="submit" class="btn">Update</button>
+      <a href="{{ url_for('recipients') }}" class="btn btn-outline" style="margin-left:1rem;">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

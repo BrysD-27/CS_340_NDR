@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}NDR App{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="content">
+        <nav>
+            <div>
+                <h1>Northwest Disaster Relief Transportation Portal</h1>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('supplies') }}">Supplies</a>
+                <a href="{{ url_for('drivers') }}">Drivers</a>
+                <a href="{{ url_for('recipients') }}">Recipients</a>
+                <a href="{{ url_for('deliveries') }}">Deliveries</a>
+                <a href="{{ url_for('deliveries_supplies') }}">Deliveries Supplies</a>
+                <a href="{{ url_for('reset_database') }}" class="btn mb-0">Reset Database</a>
+            </div>
+        </nav>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-container">
+            {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        <footer>
+            &copy; 2025 Northwest Disaster Relief | Group 102
+        </footer>
+    </div>
+</body>
+
+</html>
+
+<script>
+    setTimeout(() => {
+        document.querySelectorAll('.flash-message').forEach(el => {
+            el.style.opacity = '0';
+            setTimeout(() => el.style.display = 'none', 500);
+        });
+    }, 3500);
+    
+    function toggleAccordion(elementId) {
+    const content = document.getElementById(elementId);
+    const arrow = document.getElementById('accordion-arrow');
+    if (content.classList.contains('open')) {
+        content.classList.remove('open');
+        arrow.style.transform = "rotate(0deg)";
+    } else {
+        content.classList.add('open');
+        arrow.style.transform = "rotate(180deg)";
+    }
+}
+</script>

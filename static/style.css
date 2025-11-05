@@ -1,0 +1,520 @@
+body {
+    position: relative;
+    margin: 0;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    font-family: 'Nunito', Arial, sans-serif;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+nav {
+    background: #23272b;
+    color: #fff;
+    padding: 1.5rem 1rem;
+    margin-bottom: 0;
+}
+
+nav h1 {
+    display: inline-block;
+    margin: 0 1.5rem 0 0;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 0.8rem;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+}
+
+nav a:hover,
+nav a.reset-btn:hover {
+    color: #ffc107;
+}
+
+.hero-section {
+    text-align: center;
+    padding: 3rem 1rem 2rem 1rem;
+    background: #23272b;
+    color: #fff;
+    border-radius: 1rem;
+}
+
+.logo-img {
+    max-height: 120px;
+    margin-bottom: 1rem;
+}
+
+.info-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 2rem 0 2rem 0;
+    flex-wrap: wrap;
+}
+
+.info-card {
+    background: #fff;
+    color: #23272b;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    min-width: 250px;
+    flex: 1 1 250px;
+    text-align: center;
+}
+
+.content {
+    padding-bottom: 5rem;
+}
+
+footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: #343a40;
+    color: #fff;
+    text-align: center;
+    padding: 1.2rem 0 0.8rem 0;
+    margin-top: 3rem;
+}
+
+.flash-container {
+    position: fixed;
+    top: 5.7rem;
+    left: 90%;
+    transform: translateX(-50%);
+    z-index: 1100;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 280px;
+    pointer-events: none;
+}
+
+.flash-message {
+    font-family: 'Nunito', Arial, sans-serif;
+    padding: 1rem 1.6rem;
+    border-radius: 0.8rem;
+    font-size: 1.13rem;
+    font-weight: 600;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.16);
+    opacity: 0.98;
+    letter-spacing: 0.02em;
+    margin: 0 auto;
+    border: 1.5px solid #dcdcdc;
+    pointer-events: auto;
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.flash-message.success {
+    background: #eaffed;
+    color: #248a5c;
+    border: 1.5px solid #41d78a;
+}
+
+.flash-message.danger {
+    background: #fff2f2;
+    color: #d42d2d;
+    border: 1.5px solid #ff8787;
+}
+
+.flash-message.info {
+    background: #eaf6ff;
+    color: #2269a8;
+    border: 1.5px solid #77c2ff;
+}
+
+.flash-message.warning {
+    background: #fffbe7;
+    color: #b37c00;
+    border: 1.5px solid #ffe08a;
+}
+
+
+.btn {
+    display: inline-block;
+    background: #ffc107;
+    color: #23272b;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    margin: 0 0.5rem 0.5rem 0.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+
+.btn:hover,
+.btn:focus {
+    background: #e3a001;
+    color: #23272b;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    text-decoration: none;
+}
+
+.btn-outline {
+    background: transparent;
+    color: #ffc107;
+    border: 2px solid #ffc107;
+}
+
+.btn-outline:hover,
+.btn-outline:focus {
+    background: #ffc107;
+    color: #23272b;
+}
+
+.btn-hero {
+    font-size: 1.25rem;
+    padding: 0.75rem 2.2rem;
+    margin: 0 1rem 0.5rem 1rem;
+    font-weight: bold;
+}
+
+.mt-0 {
+    margin-top: 0;
+}
+
+.mb-0 {
+    margin-bottom: 0;
+}
+
+h1, h2, h5 {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 2px 18px rgba(0,0,0,0.06);
+    font-family: 'Nunito', Arial, sans-serif;
+    overflow: hidden;
+    border-top-left-radius: 0;
+}
+
+thead {
+    background: #f6f7fb;
+}
+
+th, td {
+    padding: .8rem .3rem;
+    text-align: left;
+}
+
+th {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #222;
+    border-bottom: 2px solid #e5e7eb;
+    letter-spacing: 0.02em;
+    background: #f6f7fb;
+}
+
+tbody tr {
+    transition: background 0.18s;
+}
+
+tbody tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+tbody tr:hover {
+    background: #fff9e6;
+}
+
+td {
+    font-size: 1.06rem;
+    color: #23272b;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+    min-height: 100px;
+}
+
+.desc-cell {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.supplies-model {
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+td:last-child, th:last-child {
+    text-align: center;
+}
+
+.rounded-table {
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+input[type="text"], input[type="number"] {
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    padding: 0.45rem 0.8rem;
+    font-size: 1rem;
+    font-family: inherit;
+    margin: 0.2rem 0;
+    outline: none;
+    background: #f6f7fb;
+    transition: border-color 0.15s;
+}
+
+input[type="text"]:focus, input[type="number"]:focus {
+    border-color: #ffc107;
+    background: #fffde7;
+}
+
+.phone, .emergency-contact {
+    font-family: 'Nunito', Arial, sans-serif;
+    font-weight: 600;
+    color: #347ab7;
+    background: #f4f8fd;
+    padding: 0.13em 0.6em;
+    letter-spacing: 0.04em;
+    font-size: 1.05em;
+    white-space: nowrap;
+}
+
+.emergency-contact {
+    color: #be5a00; 
+    background: #fff4e3;
+}
+
+.accordion-toggle {
+    background: #ffc107;
+    color: #23272b;
+    border: none;
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 1.18rem;
+    font-weight: bold;
+    padding: 0.7rem 1.3rem;
+    border-radius: 0.7rem 0.7rem 0 0;
+    cursor: pointer;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    outline: none;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: background 0.2s;
+}
+.accordion-toggle:hover, .accordion-toggle:focus {
+    background: #ffb300;
+}
+#accordion-arrow {
+    font-size: 1.18rem;
+    transition: transform 0.3s;
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.86, 0, 0.07, 1), padding 0.25s;
+    padding: 0 0;
+}
+.accordion-content.open {
+    max-height: 500px;
+    padding: 0rem 0 0.5rem 0;
+    transition: max-height 0.35s cubic-bezier(0.86, 0, 0.07, 1), padding 0.25s;
+}
+
+
+.form-card {
+    background: #fff;
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 18px rgba(0,0,0,0.08);
+    border-top-left-radius: 0;
+    padding: 2rem 2rem 1.5rem 2rem;
+    max-width: 540px;
+    width: 100%;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1.1rem;
+    flex-wrap: wrap;
+}
+
+.form input[type="text"],
+.form input[type="number"],
+.form input[type="email"],
+.form input[type="tel"],
+.form input[type="password"] {
+    border: 1.5px solid #eee;
+    border-radius: 0.7rem;
+    padding: 0.7rem 1.1rem;
+    font-size: 1rem;
+    background: #f6f7fb;
+    outline: none;
+    font-family: inherit;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 220px;
+    transition: border-color 0.18s, background 0.18s;
+}
+
+.form input[type="text"]:focus,
+.form input[type="number"]:focus,
+.form input[type="email"]:focus,
+.form input[type="tel"]:focus,
+.form input[type="password"]:focus {
+    border-color: #ffc107;
+    background: #fffde7;
+}
+
+.form textarea {
+    border: 1.5px solid #eee;
+    border-radius: 0.7rem;
+    padding: 0.7rem 1.1rem;
+    font-size: 1rem;
+    background: #f6f7fb;
+    outline: none;
+    font-family: inherit;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 2.6em;
+    max-width: 457.6px;
+    resize: vertical; /* allows user to resize vertically only */
+    transition: border-color 0.18s, background 0.18s;
+}
+
+.form textarea:focus {
+    border-color: #ffc107;
+    background: #fffde7;
+}
+
+.form select {
+    border: 1.5px solid #eee;
+    border-radius: 0.7rem;
+    padding: 0.7rem 1.1rem;
+    font-size: 1rem;
+    background: #f6f7fb;
+    font-family: inherit;
+    outline: none;
+    width: 100%;
+    max-width: 220px;
+    transition: border-color 0.18s, background 0.18s;
+}
+.form select:focus {
+    border-color: #ffc107;
+    background: #fffde7;
+}
+
+.form .btn {
+    align-self: flex-end;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 600px) {
+    .form-card { padding: 1.3rem; }
+    .form-row { flex-direction: column; gap: 0.6rem; }
+    .form .btn { width: 100%; }
+}
+
+.form label {
+    font-family: inherit;
+    font-size: 1.04em;
+    font-weight: 600;
+    color: #444;
+    display: block;
+    margin-bottom: 0.35em;
+    letter-spacing: 0.01em;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.55em;
+    cursor: pointer;
+    font-family: inherit;
+    user-select: none;
+}
+.checkbox-container input[type="checkbox"] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+.custom-checkbox {
+    display: inline-block;
+    width: 1.18em;
+    height: 1.18em;
+    background: #f6f7fb;
+    border: 2px solid #ffc107;
+    border-radius: 0.36em;
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+    vertical-align: middle;
+}
+.checkbox-container input[type="checkbox"]:checked + .custom-checkbox {
+    background: #ffc107;
+    border-color: #ffa000;
+}
+.custom-checkbox::after {
+    content: '';
+    position: absolute;
+    display: none;
+}
+.checkbox-container input[type="checkbox"]:checked + .custom-checkbox::after {
+    display: block;
+    left: 0.37em;
+    top: 0.13em;
+    width: 0.25em;
+    height: 0.6em;
+    border: solid #23272b;
+    border-width: 0 0.16em 0.16em 0;
+    transform: rotate(45deg);
+    content: '';
+    position: absolute;
+}
+
+.form input[type="datetime-local"] {
+    border: 1.5px solid #eee;
+    border-radius: 0.7rem;
+    padding: 0.7rem 1.1rem;
+    font-size: 1rem;
+    background: #f6f7fb;
+    outline: none;
+    font-family: inherit;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 220px;
+    transition: border-color 0.18s, background 0.18s;
+}
+
+.form input[type="datetime-local"]:focus {
+    border-color: #ffc107;
+    background: #fffde7;
+}
+
+.form label[for="deliveredDateTime"] {
+    font-weight: 600;
+    color: #444;
+}

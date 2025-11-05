@@ -1,0 +1,54 @@
+{% extends "index.html" %}
+{% block title %}Edit Driver{% endblock %}
+
+{% block content %}
+<h2>Edit Driver {{ driver.driverID }}</h2>
+<div class="form-card">
+  <form action="/update-driver/{{ driver.driverID }}" method="POST" class="form">
+    <div class="form-row">
+      <div style="flex:1; min-width:130px;">
+        <label for="firstName">First Name</label>
+        <input id="firstName" name="firstName" value="{{ driver.firstName }}" placeholder="First Name" type="text" required>
+      </div>
+      <div style="flex:1; min-width:130px;">
+        <label for="lastName">Last Name</label>
+        <input id="lastName" name="lastName" value="{{ driver.lastName }}" placeholder="Last Name" type="text" required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div style="flex:1; min-width:130px;">
+        <label for="phone">Phone</label>
+        <input id="phone" name="phone" value="{{ driver.phone }}" placeholder="Phone" type="tel" required>
+      </div>
+      <div style="flex:1; min-width:130px;">
+        <label for="email">Email</label>
+        <input id="email" name="email" value="{{ driver.email }}" placeholder="Email" type="email" required>
+      </div>
+    </div>
+    <div class="form-row">
+      <div style="flex:1; min-width:130px;">
+        <label for="emergencyContactName">Emergency Contact Name</label>
+        <input id="emergencyContactName" name="emergencyContactName" value="{{ driver.emergencyContactName }}" placeholder="Emergency Contact Name" type="text">
+      </div>
+      <div style="flex:1; min-width:130px;">
+        <label for="emergencyContactPhone">Emergency Contact Phone</label>
+        <input id="emergencyContactPhone" name="emergencyContactPhone" value="{{ driver.emergencyContactPhone }}" placeholder="Emergency Contact Phone" type="tel">
+      </div>
+    </div>
+    <div class="form-row">
+      <label class="checkbox-container" style="margin-top:0.8em;">
+        <input id="activeStatus" name="activeStatus" type="checkbox" {% if driver.activeStatus %}checked{% endif %}>
+        <span class="custom-checkbox"></span>
+        Active
+      </label>
+    </div>
+    <div class="form-row">
+        <textarea name="driverDetails" placeholder="Details" rows="2" style="flex:2;">{{ driver.driverDetails }}</textarea>
+    </div>
+    <div class="form-row">
+      <button type="submit" class="btn">Update</button>
+      <a href="{{ url_for('drivers') }}" class="btn btn-outline" style="margin-left:1rem;">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

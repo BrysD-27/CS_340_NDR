@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+
+{% block content %}
+
+<h2>Supplies</h2>
+<h3 class="mb-0">
+  <button class="accordion-toggle" onclick="toggleAccordion(`addSupplyAccordion`)" type="button">
+    Add Supply
+    <span id="accordion-arrow">&#9660;</span>
+  </button>
+</h3>
+<div id="addSupplyAccordion" class="accordion-content">
+  <div class="form-card">
+    <form action="/add-supply" method="POST" class="form">
+        <div class="form-row">
+            <input name="supplyBrand" placeholder="Brand" type="text" required>
+            <input name="supplyModel" placeholder="Model" type="text" required>
+        </div>
+        <div class="form-row">
+            <input name="supplyCategory" placeholder="Category" type="text" required>
+            <input name="currentInventory" type="number" placeholder="Inventory" min="0" required>
+        </div>
+        <div class="form-row">
+            <textarea name="unitDescription" placeholder="Description" rows="2"></textarea>
+        </div>
+        <button type="submit" class="btn">Add</button>
+    </form>
+  </div>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Category</th>
+            <th>Inventory</th>
+            <th>Description</th>
+            <th colspan="2">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in supplies %}
+        <tr>
+            <td>{{ s.supplyID }}</td>
+            <td>{{ s.supplyBrand }}</td>
+            <td class="supplies-model">{{ s.supplyModel }}</td>
+            <td>{{ s.supplyCategory }}</td>
+            <td>{{ s.currentInventory }}</td>
+            <td class="desc-cell">{{ s.unitDescription }}</td>
+            <td>
+                <a href="{{ url_for('edit_supply', id=s.supplyID) }}" class="btn">Edit</a>
+            </td>
+            <td>
+                <form action="/delete-supply/{{ s.supplyID }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-outline">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
